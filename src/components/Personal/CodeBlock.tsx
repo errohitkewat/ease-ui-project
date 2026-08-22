@@ -10,9 +10,24 @@ const CodeBlock = ({ code, language = "tsx" }: CodeBlockProps) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(code);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = code;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy code:", err);
+    }
   };
 
   return (
@@ -27,8 +42,10 @@ const CodeBlock = ({ code, language = "tsx" }: CodeBlockProps) => {
           {copied ? "Copied!" : "Copy"}
         </button>
       </div>
-      <pre className="bg-gray-50 border border-t-0 border-gray-200 p-4 rounded-b-md overflow-x-auto">
-        <code className="text-sm text-gray-800">{code}</code>
+      <pre className="bg-gray-50 dark:bg-zinc-950 border border-t-0 border-gray-200 dark:border-gray-700 p-4 rounded-b-md overflow-x-auto">
+        <code className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre">
+          {code}
+        </code>
       </pre>
     </div>
   );
