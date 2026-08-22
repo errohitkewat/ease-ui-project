@@ -4,23 +4,24 @@
   "description": "A modern React UI library by Devendra Dhote",
   "author": "Devendra Dhote",
   "license": "MIT",
-  "main": "dist/easeui.umd.js",
-  "module": "dist/easeui.es.js",
-  "types": "dist/types/index.d.ts",
+  "main": "dist-lib/easeui.umd.js",
+  "module": "dist-lib/easeui.es.js",
+  "types": "dist-lib/types/index.d.ts",
   "files": [
-    "dist"
+    "dist-lib"
   ],
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/easeui.es.js",
-      "require": "./dist/easeui.umd.js"
+      "import": "./dist-lib/easeui.es.js",
+      "require": "./dist-lib/easeui.umd.js"
     },
-    "./style.css": "./dist/index.css"
+    "./style.css": "./dist-lib/index.css"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc -p tsconfig.lib.json",
+    "build": "vite build",
+    "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
     "preview": "vite preview"
   },
   "peerDependencies": {
